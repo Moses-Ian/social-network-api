@@ -10,7 +10,7 @@ const userController = {
 			})
 			.populate({
 				path: 'friends',
-				select: '-__v -thoughts -friends'
+				select: '-__v -thoughts -friends, -friendCount'
 			})
 			.select('-__v')
 			.sort({ _id: -1 })
