@@ -17,11 +17,17 @@ const UserSchema = new Schema(
 			required: 'You must provide a valid email!',
 			unique: true,
 			match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, 'Please fill a valid email']
-		}
-    // comments: [
+		},
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought'
+      }
+    ]
+    // friends: [
       // {
         // type: Schema.Types.ObjectId,
-        // ref: 'Comment'
+        // ref: 'User'
       // }
     // ]
   },
@@ -35,9 +41,9 @@ const UserSchema = new Schema(
 );
 
 // get total count of comments and replies on retrieval
-UserSchema.virtual('commentCount').get(function() {
-  return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
-});
+// UserSchema.virtual('friendCount').get(function() {
+  // return this.friends.reduce((total, friend) => total + friend.replies.length + 1, 0);
+// });
 
 // create the User model using the UserSchema
 const User = model('User', UserSchema);
