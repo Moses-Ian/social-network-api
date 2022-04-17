@@ -8,7 +8,7 @@ This server will host data for a social network with MongoDB as its database. Th
 
 You can access the walkthrough video here:
 <br>
-
+https://watch.screencastify.com/v/XbiyWbriO6lxpNU6sC04
 
 ## Features
 
