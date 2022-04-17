@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 
 const userController = {
 	// get all users
@@ -57,13 +57,21 @@ const userController = {
 	// delete user
 	deleteUser({ params }, res) {
 		User.findOneAndDelete({ _id: params.id })
+		// User.findOne({ _id: params.id })
 			.then(dbUserData => {
 				if (!dbUserData) {
 					res.status(404).json({ message: 'No user found with this id!' });
 					return;
 				}
-				res.json(dbUserData);
+				// delete associated thoughts
+				//step 1: get list of ids
+				//step 2: map each id to a promise
+				//step 3: execute each promise
+				let ids = dbUserData.thoughts.map(thought => thought.toString());
+				// return Thought.findOneAndDelete({ _id: ids[0] });
+				return Promise.all(ids.map(id => Thought.findOneAndDelete({ _id: id })));
 			})
+			.then(values => res.status(200).json({ message: 'success' }))
 			.catch(err => res.status(400).json(err));
 	},
 	
