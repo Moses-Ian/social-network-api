@@ -13,6 +13,7 @@ You can access the walkthrough video here:
 ## Features
 
 * Add, Edit, and Delete users and thoughts!
+* Add and Remove friends from your friend list!
 * Add and Delete reactions!
 * Bonus: Deleting a user automatically deletes their thoughts!
 
