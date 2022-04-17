@@ -4,15 +4,7 @@ const userController = {
 	// get all users
 	getAllUser(req, res) {
 		User.find({})
-			.populate({
-				path: 'thoughts',
-				select: '-__v -username'
-			})
-			.populate({
-				path: 'friends',
-				select: '-__v -thoughts -friends, -friendCount'
-			})
-			.select('-__v')
+			.select('-__v -thoughts')
 			.sort({ _id: -1 })
 			.then(dbUserData => res.json(dbUserData))
 			.catch(err => {
