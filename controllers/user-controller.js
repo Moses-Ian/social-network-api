@@ -67,9 +67,7 @@ const userController = {
 				//step 1: get list of ids
 				//step 2: map each id to a promise
 				//step 3: execute each promise
-				let ids = dbUserData.thoughts.map(thought => thought.toString());
-				// return Thought.findOneAndDelete({ _id: ids[0] });
-				return Promise.all(ids.map(id => Thought.findOneAndDelete({ _id: id })));
+				return Promise.all(dbUserData.thoughts.map(thought => Thought.findOneAndDelete({ _id: thought.toString() })));
 			})
 			.then(values => res.status(200).json({ message: 'success' }))
 			.catch(err => res.status(400).json(err));
