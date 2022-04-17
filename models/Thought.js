@@ -1,5 +1,35 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const { DateTime } = require("luxon");
+
+const ReactionSchema = new Schema(
+	{
+		reactionId: {
+			type: Schema.Types.ObjectId,
+			default: () => new Types.ObjectId()
+		},
+		reactionBody: {
+			type: String,
+			required: true,
+			maxLength: [280, 'Too long!']
+		},
+		username: {
+			type: String,
+			required: true,
+			trim: true
+		},
+		createdAt: {
+			type: Date,
+			default: DateTime.now(),
+			get: createdAtVal => createdAtVal.toLocaleString()
+		}
+	},
+	{
+		toJSON: {
+			getters: true
+		},
+		id: false
+	}
+);
 
 const ThoughtSchema = new Schema(
   {
@@ -19,13 +49,8 @@ const ThoughtSchema = new Schema(
       type: String,
 			required: true,
 			trim: true
-    }
-		// reactions: [
-      // {
-        // type: Schema.Types.ObjectId,
-        // ref: 'Reaction'
-      // }
-    // ]
+    },
+		reactions: [ReactionSchema]
   },
   {
     toJSON: {
@@ -37,9 +62,9 @@ const ThoughtSchema = new Schema(
 );
 
 // get total count of reactions and replies on retrieval
-// ThoughtSchema.virtual('reactionCount').get(function() {
-  // return this.reactions.reduce((total, reaction) => total + reaction.replies.length + 1, 0);
-// });
+ThoughtSchema.virtual('reactionCount').get(function() {
+  return this.reactions.length;
+});
 
 // create the Thought model using the ThoughtSchema
 const Thought = model('Thought', ThoughtSchema);

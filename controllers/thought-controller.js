@@ -4,10 +4,6 @@ const thoughtController = {
 	// get all thoughts
 	getAllThought(req, res) {
 		Thought.find({})
-			// .populate({
-				// path: 'comments',
-				// select: '-__v'
-			// })
 			.select('-__v')
 			.sort({ _id: -1 })
 			.then(dbThoughtData => res.json(dbThoughtData))
@@ -20,10 +16,6 @@ const thoughtController = {
 	// get one thought by id
 	getThoughtById({ params }, res) {
 		Thought.findOne({ _id: params.id })
-			// .populate({
-				// path: 'comments',
-				// select: '-__v'
-			// })
 			.select('-__v')
 			.then(dbThoughtData => {
 				if (!dbThoughtData) {
@@ -82,7 +74,82 @@ const thoughtController = {
 				res.json(dbThoughtData);
 			})
 			.catch(err => res.status(400).json(err));
+	},
+	
+	// add reaction
+	addReaction({ params, body }, res) {
+		Thought.findOneAndUpdate(
+			{ _id: params.id },
+			{ $push: { reactions: body } },
+			{new: true, runValidators: true}
+		)
+			.then(dbThoughtData => {
+				if (!dbThoughtData) {
+					res.status(404).json({ message: 'No thought found with this id!' });
+					return;
+				}
+				res.json(dbThoughtData);
+			})
+			.catch(err => res.status(400).json(err));
+	},
+	
+	// remove reaction
+	removeReaction({ params }, res) {
+		Thought.findOneAndUpdate(
+			{ _id: params.id },
+			{ $pull: { reactions: { reactionId: params.reactionId } } },
+			{new: true}
+		)
+			.then(dbThoughtData => res.json(dbThoughtData))
+			.catch(err => res.json(err));
 	}
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = thoughtController;
